@@ -3,7 +3,32 @@ import os
 import math
 import pandas as pd
 import numpy as np
+import env
 
+def get_db_url(db, user=env.username, host=env.host, password=env.password):
+    '''
+    This function uses my info from my env file to
+    create a connection url to access the Codeup db.
+    '''
+    return f'mysql+pymysql://{user}:{password}@{host}/{db}'
+
+
+def get_store_data():
+    '''
+    Returns a dataframe of all store data in the tsa_item_demand database and saves a local copy as a csv file.
+    '''
+    url = get_db_url('tsa_item_demand')
+
+    query = '''
+            SELECT *
+            FROM items
+            JOIN sales USING(item_id)
+            JOIN stores USING(store_id)
+            '''
+
+    df = pd.read_sql(query, url)
+    df.to_csv('tsa_store_data.csv', index=False)
+    return df
 
 def swapi() -> pd.DataFrame:
     if os.path.isfile('swapi.csv'):
