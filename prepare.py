@@ -22,6 +22,7 @@ def prepare_store(store):
     store['year'] = store.index.year
     # agg column
     store['sales_total'] = store.sale_amount + store.item_price
+    store.drop(columns=['store_id','item_id'],inplace=True)
     return store
 
 def prepare_opsd(opsd):
