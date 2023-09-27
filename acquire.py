@@ -25,10 +25,16 @@ def get_store_data():
             JOIN sales USING(item_id)
             JOIN stores USING(store_id)
             '''
+    if os.path.isfile('tsa_store_data.csv'):
+        print('File exists, pulling from system.')
+        store = pd.read_csv('tsa_store_data.csv')
+        return store
+    else:
+        print('File does not exist, extracting from MySQL.')
 
-    df = pd.read_sql(query, url)
-    df.to_csv('tsa_store_data.csv', index=False)
-    return df
+        store = pd.read_sql(query, url)
+        store.to_csv('tsa_store_data.csv', index=False)
+        return store
 
 def swapi() -> pd.DataFrame:
     if os.path.isfile('swapi.csv'):
