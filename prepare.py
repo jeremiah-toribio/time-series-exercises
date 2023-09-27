@@ -22,7 +22,14 @@ def prepare_store(store):
     store['year'] = store.index.year
     # agg column
     store['sales_total'] = store.sale_amount + store.item_price
-    store.drop(columns=['store_id','item_id'],inplace=True)
+    # new column to denote location, better for viz
+    store['location'] = store['store_id'].map({1:'Alamo Ranch',2:'Grissom & Tezel',
+                                               3:'Fredericksburg Rd',4:'South Flores Market',
+                                               5:'Austin Highway',6:'W.W. White',
+                                               7:'PB & Thousand Oaks',8:'San Pedro',
+                                               9:'SW Military Dr',10:'NW Military Hwy'})
+    # redundant columns
+    store.drop(columns=['item_upc14','item_upc12','sale_id','store_id','store_zipcode','store_city','store_state'],inplace=True)
     return store
 
 def prepare_opsd(opsd):
